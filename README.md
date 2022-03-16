@@ -1,2 +1,2 @@
 # typegame
- nku å¤§ä½œä¸š
+ nku ´ó×÷Òµ
