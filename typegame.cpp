@@ -3,6 +3,7 @@
 #include<iostream>
 #include<string>
 #include<cstring>
+#include<cstdlib>
 using namespace std;
 char user[100],password[100],mode[10];
 int mod=0,nownum=1,loginnownum=0,qed=5,hhh=0;
@@ -153,7 +154,7 @@ int main(){
         if(c=='\n')c=getchar();
         tstdin[r++]=c;
     }
-    int lt=strlen(text);
+    int lt=strlen(text)-1,lr=strlen(tstdin)-2;
     int errornum=0;
     double errorrate;
     for(int i=0;i<strlen(text);i++){
@@ -178,10 +179,22 @@ int main(){
             exit(0); 
         }
         int hh=0;
+        int wei=(loginnownum-1)*qed+chapter-1;
+        for(int q=0;q<4;q++){
+            histor[wei][3]=lr%10+'0';
+            histor[wei][2]=lr/10%10+'0';
+            histor[wei][1]=lr/100%10+'0';
+            histor[wei][0]=lr/1000%10+'0';
+        }
         for(int i=1;i<=nownum;i++){
             for(int j=1;j<=qed;j++){
                 fputs(histor[hh++],infor);
             }
+            fputc('\n',infor);
         }
+        fclose(infor);
+        printf("保存成功！\n");
     }
+    printf("期待您的下次使用！\n");
+    system("pause");
 }
