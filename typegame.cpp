@@ -116,7 +116,7 @@ int selecttext(){
             char his[4];
             fgets(his,5,infor);
             for(int q=0;q<4;q++)histor[hhh++][q]=his[q];
-            history[i][j]=1000*(his[0]-48)+100*(his[1]-48)+10*(his[2]-48)+his[3]-48;
+            history[i][j]=1000*(his[0]-'0')+100*(his[1]-'0')+10*(his[2]-'0')+his[3]-'0';
         }
         fgetc(infor);
     }
@@ -136,12 +136,13 @@ int main(){
     printf("欢迎使用人工智障键盘练习系统！\n");
     printf("please use this program under GB18030\n");
     init();
+    const char str[100]={"chapter1.txt"};
     for(int i=1;i<=qed;i++){
-        chapt[i][0]='c';chapt[i][1]='h';chapt[i][2]='a';chapt[i][3]='p';chapt[i][4]='t';chapt[i][5]='e';chapt[i][0]='r';
-        chapt[i][7]=i+'0';chapt[i][8]='.';chapt[i][9]='t';chapt[i][10]='x';chapt[i][11]='t';
+        strcat(chapt[i],str);
+        chapt[i][7]=i+'0';
     }
     int chapter=selecttext();
-    if ((infor=fopen(chapt[chapter],"a"))==NULL){
+    if ((infor=fopen(chapt[chapter],"r"))==NULL){
         printf("系统错误！请检查安装情况。");
         exit(0); 
     }
@@ -163,15 +164,16 @@ int main(){
         }
     }
     errorrate=errornum/lt;
-    printf("您共计输入错误%d个字符，错误率为%.2lf",errornum,errorrate);
+    printf("debug:%d",lt);
+    printf("您共计输入错误%d个字符，错误率为%.2lf\n",errornum,errorrate);
     for(int i=1;i<=errornum;i++){
         printf("您在%d个字符处输入有错，原文为 %c ，您的输入为 %c 。\n",er[i],text[i],tstdin[i]);
     }
-    char save;
-    while(save!='y'||save!='n'){
+    char save='\0';
+    while(save!='y'&&save!='n'){
         printf("您是否要保存本次练习进度？是：y，否：n\n");
-        save=getchar();
-        if(save!='y'||save!='n')printf("输入错误，请重新选择\n");
+        scanf("%c",&save);
+        if(save!='y'&&save!='n')printf("输入错误，请重新选择\n");
     }
     if(save=='y'){
         if ((infor=fopen("history.txt","w"))==NULL){
