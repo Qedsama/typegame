@@ -6,7 +6,7 @@
 #include<cstdlib>
 using namespace std;
 char user[100],password[100],mode[10];
-int mod=0,nownum=1,loginnownum=0,qed=5,hhh=0,iii=0;
+int mod=0,nownum=0,loginnownum=0,qed=5,hhh=0,iii=0;
 char chapt[100][100],text[10000],tstdin[10000],histor[10000][5];
 int history[100][100],er[10000];
 FILE *infor;
@@ -60,6 +60,23 @@ void login(){
 void signup(){
     printf("注册：请输入您的账号\n");
     scanf("%s",user);
+    if ((infor=fopen("users.txt","r"))==NULL){
+        printf("系统错误！请检查安装情况。");
+        exit(0); 
+    }
+    char chongfu[10000][100];
+    for(int i=1;i<=nownum;i++){
+        fgets(chongfu[i],10000,infor);
+        chongfu[i][strlen(chongfu[i])-1]='\0';
+    }
+    fclose(infor);
+    for(int i=1;i<=nownum;i++){
+        if(strcmp(user,chongfu[i])==0){
+            printf("用户名错误！请重新注册！\n");
+            signup();
+            return;
+        }
+    }    
     printf("请输入您的密码\n");
     scanf("%s",password);
     char p[100];
@@ -115,9 +132,9 @@ int selecttext(){
         for(int j=1;j<=qed;j++){
             char his[5];
             fgets(his,5,infor);
-            for(int q=0;q<4;q++)histor[hhh++][q]=his[q];
+            for(int q=0;q<4;q++)histor[hhh][q]=his[q];
+            hhh++;
             history[i][j]=1000*(his[0]-'0')+100*(his[1]-'0')+10*(his[2]-'0')+his[3]-'0';
-            printf("debug:%c %c %c %c\n",his[0],his[1],his[2],his[3]);
         }
         fgetc(infor);
     }
@@ -165,8 +182,9 @@ int main(){
             er[++errornum]=i;
         }
     }
-    errorrate=errornum/lt;
-    printf("您共计输入错误%d个字符，错误率为%.2lf\n",errornum,errorrate);
+    errorrate=(double)errornum/(double)lt;
+    printf("debug:%d %d\n",errornum,lt);
+    printf("您共计输入错误%d个字符，错误率为%.3lf\n",errornum,errorrate);
     for(int i=1;i<=errornum;i++){
         printf("您在%d个字符处输入有错，原文为 %c ，您的输入为 %c 。\n",er[i],text[i],tstdin[i]);
     }
@@ -193,7 +211,7 @@ int main(){
         for(int i=1;i<=nownum;i++){
             for(int j=1;j<=qed;j++){
                 int sk=0;
-                while(sk<4){fputc(histor[hh][sk++],infor);printf("debug:%c ",histor[hh][sk++]);}  
+                while(sk<4){fputc(histor[hh][sk],infor);sk++;}  
                 hh++;
             }
             fputc('\n',infor);
